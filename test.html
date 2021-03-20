@@ -1,12 +1,101 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="utf-8">
-<title>菜鸟教程(runoob.com)</title>
-</head>
-<body>
-
-<a href="https://www.runoob.com">这是一个链接使用了 href 属性</a>
-
-</body>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+		<title>js操作本地文件</title>
+	</head>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<script language="JavaScript">
+		var test = "";
+		function TextStreamTest(fname,Addname,n){
+			var fso,f,ts,s;
+			var ForRWA=0,ForReading=1,ForWriting=2,ForAppending=8;
+			var TristateUseDefault=-2,TristateTrue=-1,TristateFalse=0;
+			fso=new ActiveXObject("Scripting.FileSystemObject");
+			var s1=Addname.innerHTML;
+			if(fname.value!=""){
+				f=fso.GetFile(fname.value);
+				switch(n){
+					case 1:ForRWA=ForWriting;break;
+					case 2:ForRWA=ForAppending;break;
+				}
+				if(n&gt;0){
+					ts=f.OpenAsTextStream(ForRWA,TristateUseDefault);
+					var s1=Addname.innerHTML;
+					ts.Write(s1);
+					s=ts.ReadLine();
+					ts.Close();
+				}
+				ts=f.OpenAsTextStream(ForReading,TristateUseDefault);
+				s=ts.ReadLine();
+				ts.Close();
+			}
+			return(s);
+		}
+		
+		function run(n){
+			document.form3.textarea1.innerHTML=TextStreamTest(document.form5.text1,document.form4.textarea2,n);
+		}
+		
+		function load() 
+		{ 
+			document.getElementsByName("textarea2")[0].innerHTML = document.getElementsByTagName('html')[0].innerHTML; 
+			alert(document.getElementsByName("textarea2")[0].innerHTML)
+			setTimeout(run(1),2000);
+		} 
+		
+		function ceshi()
+		{
+			$.ajax({
+				type: "get",
+				url: window.location.href,
+				dataType:'html',
+				success: function(data) { 
+					test = data;
+					document.getElementsByName("textarea2")[0].value = test;
+				},
+				complete: function(XMLHttpRequest, textStatus){
+					load(1)
+				}
+			});
+		}
+	</script>
+	<body onload="setTimeout(ceshi,3000)">
+		@errorInfo
+		<table width="392" border="1">
+			<tr>
+				<td height="24" colspan="2">
+					<form name="form5" method="post" action="">
+						文件路径:<input name="text1" type="textfield" value="D:\bbb.html" size="40">
+					</form>
+				</td>
+			</tr>
+			<tr>
+				<td width="207" height="163">
+					<form name="form3" method="post" action="">
+						<textarea name="textarea1" cols="30" rows="10"></textarea>
+					</form>
+				</td>
+				<td>
+					<form name="form4" method="post" action="">
+						<textarea name="textarea2" rows="10"></textarea>
+					</form>
+				</td>
+			</tr>
+			<tr>
+				<td height="28">
+					<form name="form1" method="post" action="">
+						<input type="button" name="Button" value="读取" onclick="run(0)">
+					</form>
+				</td>
+				<td>
+					<form name="form2" method="post" action="">
+						<input type="button" name="Submit2" value="写入" onclick="run(1)">
+						<input type="button" name="Button" value="添加" onclick="run(2)">
+					</form>
+				</td>
+			</tr>
+		</table>
+	</body>
+ 
 </html>
